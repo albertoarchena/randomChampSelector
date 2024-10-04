@@ -4,10 +4,10 @@ export default function SummonerSearch() {
   const [summonerName, setSummonerName] = useState("");
   const [summonerData, setSummonerData] = useState(null);
 
+  const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const handleSearch = async () => {
-    const response = await fetch(
-      `http://localhost:3001/summoner/${summonerName}`
-    );
+    const response = await fetch(`${backendUrl}/summoner/${summonerName}`);
     const data = await response.json();
     setSummonerData(data);
   };
