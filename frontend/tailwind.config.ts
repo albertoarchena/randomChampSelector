@@ -8,9 +8,16 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        MainFont: ["Beaufort for LOL", "sans-serif"],
+        SecondaryFont: ["Spiegel Sans", "sans-serif"],
+      },
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+      },
+      backgroundImage: {
+        "hex-wallpaper": "url('@/src/public/img/wallpaper.jpg)",
       },
     },
   },
