@@ -1,28 +1,35 @@
-require("dotenv").config();
-
 const express = require("express");
 const axios = require("axios");
+const cors = require("cors");
 const app = express();
+const port = process.env.PORT || 3030;
 
-const port = process.env.PORT;
-const RIOT_API_KEY = process.env.RIOT_API_KEY;
+app.use(cors());
 
-app.get("/summoner/:summonerName", async (req, res) => {
-  const summonerName = req.params.summonerName;
-
+// Ruta para obtener los campeones con nombre e imagen
+app.get("/champions", async (req, res) => {
   try {
-    const response = await axios.get(
-      `https://euw1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}`,
-      {
-        headers: {
-          "X-Riot-Token": RIOT_API_KEY,
-        },
-      }
+    const versionResponse = await axios.get(
+      "https://ddragon.leagueoflegends.com/api/versions.json"
     );
-    res.json(response.data);
+    const latestVersion = versionResponse.data[0];
+
+    const championsResponse = await axios.get(
+      `https://ddragon.leagueoflegends.com/cdn/${latestVersion}/data/en_US/champion.json`
+    );
+
+    const championsData = championsResponse.data.data;
+
+    // Extraer nombres e imágenes de los campeones
+    const championsList = Object.keys(championsData).map((key) => ({
+      name: championsData[key].name,
+      image: `https://ddragon.leagueoflegends.com/cdn/img/champion/loading/${championsData[key].id}_0.jpg`,
+    }));
+
+    res.json(championsList);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error al obtener datos del invocador");
+    res.status(500).send("Error al obtener los campeones");
   }
 });
 

@@ -8,3 +8,6 @@
 
 # env files
 .env
+
+# custom files
+/dragontail-14.9.1
